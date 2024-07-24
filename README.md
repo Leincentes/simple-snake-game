@@ -68,10 +68,3 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 - Inspired by classic Snake games.
 - Uses Pygame library for game development.
 
-## Contact
-
-For any questions or suggestions, please contact [your email] or open an issue in the repository.
-
----
-
-Happy coding!
