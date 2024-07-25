@@ -39,7 +39,7 @@ A simple Snake game implemented in Python using the Pygame library. This game de
 
 1. **Run the game**:
     ```bash
-    python snake_game.py
+    python main.py
     ```
 
 2. **Control the Snake**:
