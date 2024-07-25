@@ -28,51 +28,60 @@ class SnakeGame:
         self.game_window = pygame.display.set_mode((self.window_x, self.window_y))
         self.fps = pygame.time.Clock()
 
+        # Initialize game state
+        self.reset_game()
+
     def reset_game(self):
         # Initialize game state
         self.snake_position = [100, 50]
         self.snake_body = [[100, 50], [90, 50], [80, 50], [70, 50]]
-        self.fruit_position = [random.randrange(1, (self.window_x // self.snake_block)) * self.snake_block,
-                               random.randrange(1, (self.window_y // self.snake_block)) * self.snake_block]
+        self.fruit_position = self.random_position()
         self.fruit_spawn = True
         self.direction = 'RIGHT'
         self.change_to = self.direction
         self.score = 0
         self.obstacles = self.place_obstacles()
 
+    def random_position(self):
+        return [
+            random.randrange(1, (self.window_x // self.snake_block)) * self.snake_block,
+            random.randrange(1, (self.window_y // self.snake_block)) * self.snake_block
+        ]
+
     def place_obstacles(self):
         obstacle_count = self.initial_obstacle_count + (self.score // self.obstacle_increment_score) * 5
         obstacles = []
         for _ in range(obstacle_count):
-            pos = [random.randrange(1, (self.window_x // self.snake_block)) * self.snake_block,
-                   random.randrange(1, (self.window_y // self.snake_block)) * self.snake_block]
+            pos = self.random_position()
             while pos in self.snake_body or pos == self.fruit_position or pos in obstacles:
-                pos = [random.randrange(1, (self.window_x // self.snake_block)) * self.snake_block,
-                       random.randrange(1, (self.window_y // self.snake_block)) * self.snake_block]
+                pos = self.random_position()
             obstacles.append(pos)
         return obstacles
 
-    def show_score(self, choice, color, font, size):
-        score_font = pygame.font.SysFont(font, size)
-        score_surface = score_font.render('Score : ' + str(self.score), True, color)
+    def show_score(self):
+        font = pygame.font.SysFont('times new roman', 20)
+        score_surface = font.render(f'Score: {self.score}', True, self.yellow)
         score_rect = score_surface.get_rect()
+        score_rect.topleft = (10, 10)
         self.game_window.blit(score_surface, score_rect)
 
     def game_over(self):
-        my_font = pygame.font.SysFont('times new roman', 50)
-        game_over_surface = my_font.render('Your Score is : ' + str(self.score), True, self.red)
+        font = pygame.font.SysFont('times new roman', 50)
+        game_over_surface = font.render(f'Your Score: {self.score}', True, self.red)
         game_over_rect = game_over_surface.get_rect()
         game_over_rect.midtop = (self.window_x / 2, self.window_y / 4)
         self.game_window.blit(game_over_surface, game_over_rect)
-        
+
         restart_font = pygame.font.SysFont('times new roman', 30)
         restart_surface = restart_font.render('Press R to Restart or Q to Quit', True, self.yellow)
         restart_rect = restart_surface.get_rect()
         restart_rect.midtop = (self.window_x / 2, self.window_y / 2)
         self.game_window.blit(restart_surface, restart_rect)
-        
-        pygame.display.flip()
 
+        pygame.display.flip()
+        self.wait_for_restart_or_quit()
+
+    def wait_for_restart_or_quit(self):
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN:
@@ -86,23 +95,15 @@ class SnakeGame:
     def handle_events(self):
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_UP:
+                if event.key == pygame.K_UP and self.direction != 'DOWN':
                     self.change_to = 'UP'
-                if event.key == pygame.K_DOWN:
+                if event.key == pygame.K_DOWN and self.direction != 'UP':
                     self.change_to = 'DOWN'
-                if event.key == pygame.K_LEFT:
+                if event.key == pygame.K_LEFT and self.direction != 'RIGHT':
                     self.change_to = 'LEFT'
-                if event.key == pygame.K_RIGHT:
+                if event.key == pygame.K_RIGHT and self.direction != 'LEFT':
                     self.change_to = 'RIGHT'
-
-        if self.change_to == 'UP' and self.direction != 'DOWN':
-            self.direction = 'UP'
-        if self.change_to == 'DOWN' and self.direction != 'UP':
-            self.direction = 'DOWN'
-        if self.change_to == 'LEFT' and self.direction != 'RIGHT':
-            self.direction = 'LEFT'
-        if self.change_to == 'RIGHT' and self.direction != 'LEFT':
-            self.direction = 'RIGHT'
+        self.direction = self.change_to
 
     def update_snake(self):
         if self.direction == 'UP':
@@ -115,17 +116,15 @@ class SnakeGame:
             self.snake_position[0] += self.snake_block
 
         self.snake_body.insert(0, list(self.snake_position))
-        if self.snake_position[0] == self.fruit_position[0] and self.snake_position[1] == self.fruit_position[1]:
+        if self.snake_position == self.fruit_position:
             self.score += 10
             self.fruit_spawn = False
-            self.obstacles = self.place_obstacles()  # Place new obstacles
+            self.obstacles = self.place_obstacles()
         else:
             self.snake_body.pop()
-        
+
         if not self.fruit_spawn:
-            self.fruit_position = [random.randrange(1, (self.window_x // self.snake_block)) * self.snake_block,
-                                   random.randrange(1, (self.window_y // self.snake_block)) * self.snake_block]
-        
+            self.fruit_position = self.random_position()
         self.fruit_spawn = True
 
     def draw_elements(self):
@@ -135,24 +134,21 @@ class SnakeGame:
         pygame.draw.rect(self.game_window, self.yellow, pygame.Rect(self.fruit_position[0], self.fruit_position[1], self.snake_block, self.snake_block))
         for obs in self.obstacles:
             pygame.draw.rect(self.game_window, self.grey, pygame.Rect(obs[0], obs[1], self.snake_block, self.snake_block))
-        self.show_score(1, self.yellow, 'times new roman', 20)
+        self.show_score()
         pygame.display.update()
 
     def check_game_over(self):
-        if self.snake_position[0] < 0 or self.snake_position[0] > self.window_x - self.snake_block:
+        if self.snake_position[0] < 0 or self.snake_position[0] >= self.window_x:
             return True
-        if self.snake_position[1] < 0 or self.snake_position[1] > self.window_y - self.snake_block:
+        if self.snake_position[1] < 0 or self.snake_position[1] >= self.window_y:
             return True
-        for block in self.snake_body[1:]:
-            if self.snake_position[0] == block[0] and self.snake_position[1] == block[1]:
-                return True
-        for obs in self.obstacles:
-            if self.snake_position[0] == obs[0] and self.snake_position[1] == obs[1]:
-                return True
+        if self.snake_position in self.snake_body[1:]:
+            return True
+        if self.snake_position in self.obstacles:
+            return True
         return False
 
     def run(self):
-        self.reset_game()
         while True:
             self.handle_events()
             self.update_snake()

@@ -1,0 +1,26 @@
+# settings.py
+
+# Window dimensions
+WINDOW_X = 720
+WINDOW_Y = 480
+
+# Snake settings
+SNAKE_BLOCK = 10
+SNAKE_SPEED = 15
+
+# Colors
+GREEN = (0, 255, 0)
+YELLOW = (255, 255, 0)
+BLACK = (0, 0, 0)
+GREY = (169, 169, 169)
+RED = (255, 0, 0)
+POWER_UP_COLOR = (255, 0, 255) 
+
+# Power-up settings
+POWER_UP_SIZE = 10
+POWER_UP_DURATION = 10000
+POWER_UP_SPAWN_INTERVAL = 20000
+
+# Obstacle settings
+INITIAL_OBSTACLE_COUNT = 5
+OBSTACLE_INCREMENT_SCORE = 100

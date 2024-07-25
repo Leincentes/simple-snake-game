@@ -6,10 +6,12 @@ A simple Snake game implemented in Python using the Pygame library. This game de
 
 ## Features
 
-- Classic Snake game mechanics
+- Classic Snake game mechanics with power-ups
 - Scoring system
 - Obstacles that increase in number as the player scores more points
+- Power-ups that grant temporary invulnerability and the ability to destroy obstacles
 - Restart or quit options on game over
+- Responsive display with a menu, pause functionality, and detailed instructions
 
 ## Prerequisites
 
@@ -45,19 +47,29 @@ A simple Snake game implemented in Python using the Pygame library. This game de
     - **DOWN Arrow**: Move Down
     - **LEFT Arrow**: Move Left
     - **RIGHT Arrow**: Move Right
+    - **P**: Pause/Resume the game
+    - **Q**: Quit the game
 
 3. **Game Over**:
     - After a game over, press **R** to restart or **Q** to quit.
 
+4. **Power-ups**:
+    - Power-ups appear randomly and grant temporary invulnerability, allowing the snake to destroy obstacles.
+    - The snake's color changes when a power-up is active.
+
 ## Game Mechanics
 
 - **Objective**: Eat the fruit to score points and grow the snake.
-- **Obstacles**: Randomly placed obstacles appear each time a fruit is eaten. The number of obstacles increases every 100 points.
-- **Game Over**: The game ends if the snake collides with the walls, itself, or an obstacle.
+- **Obstacles**: Randomly placed obstacles appear. The number of obstacles increases every 100 points.
+- **Power-ups**: Spawn randomly and provide temporary invulnerability, changing the snake’s color and allowing it to destroy obstacles.
+- **Game Over**: The game ends if the snake collides with the walls, itself, or an obstacle (unless invulnerable).
 
 ## Code Structure
 
-- **`snake_game.py`**: Contains the main game logic including game state management, event handling, and rendering.
+- **`snake_game.py`**: Contains the main game logic including game state management, event handling, rendering, and power-up mechanics.
+- **`settings.py`**: Contains configuration settings such as colors, sizes, and game parameters.
+- **`utils.py`**: Includes utility functions for random position generation and power-up spawning.
+- **`display.py`**: Manages rendering of game elements, menus, and UI components.
 
 ## License
 
@@ -67,4 +79,3 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 - Inspired by classic Snake games.
 - Uses Pygame library for game development.
-
