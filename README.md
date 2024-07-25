@@ -66,10 +66,11 @@ A simple Snake game implemented in Python using the Pygame library. This game de
 
 ## Code Structure
 
-- **`snake_game.py`**: Contains the main game logic including game state management, event handling, rendering, and power-up mechanics.
+- **`game.py`**: Contains the main game logic including game state management, event handling, rendering, and power-up mechanics.
 - **`settings.py`**: Contains configuration settings such as colors, sizes, and game parameters.
 - **`utils.py`**: Includes utility functions for random position generation and power-up spawning.
 - **`display.py`**: Manages rendering of game elements, menus, and UI components.
+- **`main.py`**: Start the game.
 
 ## License
 
